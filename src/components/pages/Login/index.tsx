@@ -3,10 +3,9 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import styles from "./Login.module.css";
 import {
-  CognitoUserPool,
-  CognitoUser,
-  AuthenticationDetails,
-} from "amazon-cognito-identity-js";
+  CognitoIdentityProviderClient,
+  InitiateAuthCommand,
+} from "@aws-sdk/client-cognito-identity-provider";
 import { createHmac } from "crypto";
 
 // Configuração do User Pool
@@ -14,8 +13,7 @@ const poolData = {
   UserPoolId: "us-east-1_zC8As2I7i", // Substitua pelo seu User Pool ID
   ClientId: "433h4kjc2qh88hjmfvaaa2qbkq", // Substitua pelo seu Client ID
 };
-
-const userPool = new CognitoUserPool(poolData);
+const client = new CognitoIdentityProviderClient({ region: "us-east-1" });
 
 // Função para calcular o SECRET_HASH
 const calculateSecretHash = (
@@ -34,47 +32,40 @@ const Login = () => {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Configuração do usuário
-    const userData = {
-      Username: email,
-      Pool: userPool,
-    };
-
-    const cognitoUser = new CognitoUser(userData);
-
-    // Calcular o SECRET_HASH
-    const clientSecret = "17md3mq5adem1bitkgo86k68vv217qbmmo8hbmtnf8lfpa7139eu"; // Substitua pelo seu Client Secret
+    const clientSecret = "17md3mq5adem1bitkgo86k68vv217qbmmo8hbmtnf8lfpa7139eu";
     const secretHash = calculateSecretHash(
       email,
       poolData.ClientId,
       clientSecret
     );
 
-    // Detalhes de autenticação com SECRET_HASH
-    const authenticationDetails = new AuthenticationDetails({
-      Username: email,
-      Password: password,
-      ClientMetadata: {
-        // Adicionar SECRET_HASH aqui
+    // Configurar o comando para autenticação (sem ADMIN)
+    const command = new InitiateAuthCommand({
+      AuthFlow: "USER_PASSWORD_AUTH",
+      ClientId: poolData.ClientId,
+      AuthParameters: {
+        USERNAME: email,
+        PASSWORD: password,
         SECRET_HASH: secretHash,
       },
     });
 
-    // Autenticação
-    cognitoUser.authenticateUser(authenticationDetails, {
-      onSuccess: (session) => {
-        console.log("Login bem-sucedido:", session);
-        setError("");
-        router.push("/");
-      },
-      onFailure: (err) => {
-        console.error("Erro no login:", err);
+    try {
+      const response = await client.send(command);
+      console.log("Login bem-sucedido:", response);
+      setError("");
+      router.push("/");
+    } catch (err: any) {
+      console.error("Erro no login:", err);
+      if (err.name === "NotAuthorizedException") {
         setError("Usuário ou senha incorretos");
-      },
-    });
+      } else {
+        setError("Ocorreu um erro durante o login. Tente novamente.");
+      }
+    }
   };
 
   return (
