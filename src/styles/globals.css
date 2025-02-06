@@ -1,0 +1,28 @@
+/* styles/global.css */
+/* Reset básico */
+html, body, div, span, h1, h2, h3, h4, h5, h6, p, a, img, ul, ol, li, form, label, input, button {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    box-sizing: border-box;
+}
+
+/* Garantir que o body ocupe toda a altura da tela */
+html, body {
+    height: 100%;
+}
+
+/* Remover margens e padding padrão do body */
+body {
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+}
+
+/* Garantir que o container principal ocupe toda a altura */
+#__next {
+    height: 100%;
+}

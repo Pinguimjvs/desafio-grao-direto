@@ -1,0 +1,21 @@
+# Ignorar node_modules em qualquer subpasta
+node_modules/
+
+# Ignorar build do Next.js
+.next/
+
+# Ignorar arquivos de ambiente
+.env
+.next-env.d.ts
+
+# Ignorar arquivos de lock (se estiver usando Yarn ou npm)
+yarn.lock
+package-lock.json
+
+# Ignorar logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignorar diretórios do editor (caso esteja usando VSCode)
+.vscode/
