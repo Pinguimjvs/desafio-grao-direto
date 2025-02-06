@@ -55,19 +55,8 @@
   background: #e65c00;
 }
 
-.linkText {
-  text-align: center;
-  color: #ff6600;
-  cursor: pointer;
-}
-
-.linkText:hover {
-  text-decoration: underline;
-}
-
 .error {
   color: red;
   font-size: 14px;
-  margin-top: 10px;
-  text-align: center;
+  text-align: start;
 }

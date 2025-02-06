@@ -7,15 +7,14 @@ import {
   InitiateAuthCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { createHmac } from "crypto";
+import { useAuth } from "@/hooks/useAuth";
 
-// Configuração do User Pool
 const poolData = {
-  UserPoolId: "us-east-1_zC8As2I7i", // Substitua pelo seu User Pool ID
-  ClientId: "433h4kjc2qh88hjmfvaaa2qbkq", // Substitua pelo seu Client ID
+  UserPoolId: process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID,
+  ClientId: process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID,
 };
 const client = new CognitoIdentityProviderClient({ region: "us-east-1" });
 
-// Função para calcular o SECRET_HASH
 const calculateSecretHash = (
   username: string,
   clientId: string,
@@ -30,19 +29,19 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { login } = useAuth();
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const clientSecret = "17md3mq5adem1bitkgo86k68vv217qbmmo8hbmtnf8lfpa7139eu";
+    const clientSecret = process.env.NEXT_PUBLIC_COGNITO_CLIENT_SECRET;
     const secretHash = calculateSecretHash(
       email,
       poolData.ClientId,
       clientSecret
     );
 
-    // Configurar o comando para autenticação (sem ADMIN)
     const command = new InitiateAuthCommand({
       AuthFlow: "USER_PASSWORD_AUTH",
       ClientId: poolData.ClientId,
@@ -57,9 +56,13 @@ const Login = () => {
       const response = await client.send(command);
       console.log("Login bem-sucedido:", response);
       setError("");
-      router.push("/");
+
+      const token = response.AuthenticationResult?.IdToken;
+      if (token) {
+        login(token);
+      }
     } catch (err: any) {
-      console.error("Erro no login:", err);
+      console.log("Erro no login:", err);
       if (err.name === "NotAuthorizedException") {
         setError("Usuário ou senha incorretos");
       } else {

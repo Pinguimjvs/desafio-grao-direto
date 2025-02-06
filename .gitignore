@@ -7,6 +7,7 @@ node_modules/
 # Ignorar arquivos de ambiente
 .env
 .next-env.d.ts
+.env.local
 
 # Ignorar arquivos de lock (se estiver usando Yarn ou npm)
 yarn.lock

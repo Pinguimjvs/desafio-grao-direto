@@ -13,24 +13,21 @@
     justify-content: space-between;
 }
 
-/* Botão de voltar */
 .backButton {
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
-    margin-right: 20px; /* Espaço entre a logo e as informações do usuário */
+    margin-right: 20px;
 }
 
-/* Estilo da logo */
 .logo {
-    width: 100px; /* Ajuste o tamanho conforme necessário */
+    width: 100px; 
     height: auto;
 }
 
-/* Container das informações do usuário */
 .userInfo {
-    text-align: right; /* Alinhar o texto à esquerda */
+    text-align: right;
 }
 
 .title {
@@ -46,10 +43,23 @@
     margin-bottom: 20px;
 }
 
-/* Divider */
 .divider {
     width: 100%;
     height: 1px;
     background-color: #ddd;
     margin-top: 10px;
 }
+
+.logoutButton {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .logoutButton:hover {
+    background-color: #ff7875;
+  }
