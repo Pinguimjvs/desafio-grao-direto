@@ -1,4 +1,3 @@
-// pages/RestaurantDetails.tsx
 import React, { useEffect } from "react";
 import RestaurantDetails from "@/components/pages/RestaurantDetails";
 import { useAuth } from "@/hooks/useAuth";

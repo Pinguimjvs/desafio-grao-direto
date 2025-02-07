@@ -1,6 +1,5 @@
 import api from "./api";
 
-// Função para buscar todos os restaurantes
 export const getRestaurants = async (q?: string) => {
   try {
     const response = await api.get(`/restaurants?q=${q}`);
@@ -11,7 +10,6 @@ export const getRestaurants = async (q?: string) => {
   }
 };
 
-// Função para buscar um restaurante pelo ID
 export const getRestaurantById = async (id: string) => {
   try {
     const response = await api.get(`/restaurants/${id}`);
